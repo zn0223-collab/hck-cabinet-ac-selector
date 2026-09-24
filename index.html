@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HCK Cabinet Air Conditioner Selector | Enclosure Cooling Calculator</title>
+<meta name="description" content="Free online cabinet air conditioner selector. Enter enclosure volume, internal heat load, ambient temperature and IP rating to get the recommended HCK model (2000–7500 W).">
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "SoftwareApplication",
+  "name": "HCK Cabinet Air Conditioner Selector",
+  "applicationCategory": "BusinessApplication",
+  "operatingSystem": "Web",
+  "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+  "publisher": {"@type": "Organization", "name": "Zhejiang Haocheng Industrial Control Equipment Co., Ltd."}
+}
+</script>
+<style>
+  :root{
+    --blue:#0b5fb0; --cyan:#13c2d6; --ink:#13314f; --bg:#f5f9fd; --card:#ffffff;
+    --line:#dce7f2; --muted:#5d7591; --ok:#0a8f5b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:-apple-system,Segoe UI,Roboto,Helvetica,Arial,"PingFang SC","Microsoft YaHei",sans-serif;
+       background:linear-gradient(180deg,#eef5fc,#f5f9fd 240px);color:var(--ink);line-height:1.6}
+  header{background:linear-gradient(120deg,#0b5fb0,#13c2d6);color:#fff;padding:26px 20px}
+  header h1{margin:0 0 6px;font-size:22px}
+  header p{margin:0;opacity:.92;font-size:14px}
+  .wrap{max-width:960px;margin:0 auto;padding:18px}
+  .bar{display:flex;gap:6px;flex-wrap:wrap;margin:14px 0}
+  .bar button{border:1px solid var(--line);background:#fff;color:var(--ink);padding:6px 12px;border-radius:20px;cursor:pointer;font-size:13px}
+  .bar button.on{background:var(--blue);color:#fff;border-color:var(--blue)}
+  .grid{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:720px){.grid{grid-template-columns:1fr}}
+  .card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:0 4px 18px rgba(11,95,176,.06)}
+  label{display:block;font-size:13px;color:var(--muted);margin:10px 0 4px}
+  input,select{width:100%;padding:10px 12px;border:1px solid var(--line);border-radius:9px;font-size:15px;color:var(--ink);background:#fff}
+  .hint{font-size:12px;color:var(--muted);margin-top:3px}
+  .calc{margin-top:8px;background:linear-gradient(120deg,#0b5fb0,#13c2d6);color:#fff;border:none;padding:12px;border-radius:10px;font-size:15px;cursor:pointer;width:100%}
+  .calc:hover{opacity:.94}
+  .out{margin-top:14px}
+  .reco{border:1px solid var(--line);border-left:5px solid var(--cyan);background:#fff;border-radius:12px;padding:16px}
+  .reco .model{font-size:26px;font-weight:700;color:var(--blue)}
+  table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
+  th,td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left}
+  th{color:var(--muted);font-weight:600}
+  .note{font-size:12.5px;color:var(--muted);margin-top:10px}
+  .tags{margin-top:10px;display:flex;gap:8px;flex-wrap:wrap}
+  .tag{font-size:12px;background:#eaf4fb;color:var(--blue);border:1px solid var(--line);padding:4px 10px;border-radius:20px}
+  footer{color:var(--muted);font-size:12px;text-align:center;padding:18px}
+  a{color:var(--blue)}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap" style="padding-bottom:0">
+    <h1 id="t_title">Cabinet Air Conditioner Selector</h1>
+    <p id="t_sub">Free enclosure cooling calculator — size the right HCK model in seconds</p>
+  </div>
+</header>
+
+<div class="wrap">
+  <div class="bar" id="langbar"></div>
+
+  <div class="grid">
+    <div class="card">
+      <h3 id="t_inputs">Input parameters</h3>
+      <label id="l_vol">Enclosure internal volume (m³)</label>
+      <input id="vol" type="number" min="0" step="0.01" value="0.60">
+      <div class="hint" id="h_vol">e.g. 0.6 m³ for a typical 800×600×1200 mm cabinet</div>
+
+      <label id="l_heat">Internal heat load (W)</label>
+      <input id="heat" type="number" min="0" step="10" value="450">
+      <div class="hint" id="h_heat">Sum of heat from drives, PLC, transformers, batteries…</div>
+
+      <label id="l_amb">Max ambient temperature (°C)</label>
+      <input id="amb" type="number" step="1" value="50">
+
+      <label id="l_tint">Target internal temperature (°C)</label>
+      <input id="tint" type="number" step="1" value="35">
+
+      <label id="l_ins">Enclosure insulation</label>
+      <select id="ins">
+        <option value="6.0" id="o_none">No insulation (bare steel)</option>
+        <option value="3.0" id="o_light">Light insulation (sandwich panel)</option>
+        <option value="1.8" id="o_well">Well insulated</option>
+      </select>
+
+      <label id="l_ip">Required protection rating</label>
+      <select id="ip">
+        <option value="IP55" selected>IP55</option>
+        <option value="IP54">IP54</option>
+        <option value="IP65">IP65</option>
+      </select>
+
+      <label id="l_volt">Supply voltage</label>
+      <select id="volt">
+        <option value="220V" selected>220 V ±10% 50 Hz</option>
+        <option value="48VDC">48 V DC (battery / solar)</option>
+      </select>
+
+      <button class="calc" id="b_calc">Calculate</button>
+    </div>
+
+    <div class="card out">
+      <div class="reco" id="reco">
+        <div id="t_placeholder" style="color:var(--muted)">Enter parameters and press Calculate.</div>
+      </div>
+      <div class="tags" id="tags"></div>
+      <div class="note" id="t_disclaimer"></div>
+    </div>
+  </div>
+</div>
+
+<footer id="t_footer"></footer>
+
+<script>
+var L = {
+  en:{
+    title:"Cabinet Air Conditioner Selector",
+    sub:"Free enclosure cooling calculator — size the right HCK model in seconds",
+    inputs:"Input parameters",
+    vol:"Enclosure internal volume (m³)", h_vol:"e.g. 0.6 m³ for a typical 800×600×1200 mm cabinet",
+    heat:"Internal heat load (W)", h_heat:"Sum of heat from drives, PLC, transformers, batteries…",
+    amb:"Max ambient temperature (°C)", tint:"Target internal temperature (°C)",
+    ins:"Enclosure insulation", none:"No insulation (bare steel)", light:"Light insulation (sandwich panel)", well:"Well insulated",
+    ip:"Required protection rating", volt:"Supply voltage",
+    calc:"Calculate",
+    placeholder:"Enter parameters and press Calculate.",
+    reco:"Recommended model", internal:"Internal heat load", env:"Envelope heat gain", total:"Total cooling demand",
+    req:"Required capacity (×1.3 safety)", range:"Cooling capacity", op:"Operating range", ref:"Refrigerant",
+    note_custom:"Load exceeds standard range — contact HCK for a custom engineered solution.",
+    note_std:"Standard HCK model. Final selection per datasheet and site conditions.",
+    disclaimer:"This calculator is a guidance tool using a simplified enclosure model (surface area ≈ 5.5·V^(2/3), U by insulation). For critical or hazardous environments confirm with the HCK engineering team.",
+    footer:"HCK cabinet air conditioners · Zhejiang Haocheng Industrial Control Equipment Co., Ltd. · IP55 · −40…+55 °C · R410A · rotary compressor · RS485 · CE-marked · OEM/ODM"
+  },
+  zh:{
+    title:"机柜空调选型计算器",
+    sub:"免费机柜制冷计算器 — 秒级推荐合适 HCK 型号",
+    inputs:"输入参数",
+    vol:"机柜内部体积 (m³)", h_vol:"例如 800×600×1200 mm 机柜约 0.6 m³",
+    heat:"内部热负荷 (W)", h_heat:"变频器、PLC、变压器、电池等发热总和",
+    amb:"最高环境温度 (°C)", tint:"目标柜内温度 (°C)",
+    ins:"机柜保温情况", none:"无保温（裸钢板）", light:"轻度保温（夹层板）", well:"保温良好",
+    ip:"所需防护等级", volt:"供电电压",
+    calc:"计算",
+    placeholder:"输入参数后点击计算。",
+    reco:"推荐型号", internal:"内部热负荷", env:"围护得热", total:"总制冷需求",
+    req:"所需制冷量（×1.3 安全系数）", range:"制冷量", op:"工作范围", ref:"制冷剂",
+    note_custom:"负荷超出标准范围 — 请联系 HCK 定制方案。",
+    note_std:"标准 HCK 机型，最终以规格书及现场工况为准。",
+    disclaimer:"本计算器为简化机柜模型（表面积 ≈ 5.5·V^(2/3)，U 按保温取值）的参考工具。关键或危险环境请与 HCK 技术团队确认。",
+    footer:"HCK 机柜空调 · 浙江昊诚工控设备有限公司 · IP55 · −40…+55 °C · R410A · 转子式压缩机 · RS485 · CE 标识 · OEM/ODM"
+  },
+  ru:{
+    title:"Подбор кондиционера для шкафа",
+    sub:"Бесплатный калькулятор охлаждения корпуса — подберите модель HCK за секунды",
+    inputs:"Параметры ввода",
+    vol:"Внутренний объём шкафа (м³)", h_vol:"напр. 0.6 м³ для шкафа 800×600×1200 мм",
+    heat:"Внутренние тепловыделения (Вт)", h_heat:"Сумма тепла от приводов, ПЛК, трансформаторов, АКБ…",
+    amb:"Макс. температура среды (°C)", tint:"Целевая темп. в шкафу (°C)",
+    ins:"Теплоизоляция корпуса", none:"Без изоляции (сталь)", light:"Лёгкая (сэндвич)", well:"Хорошая изоляция",
+    ip:"Степень защиты", volt:"Напряжение питания",
+    calc:"Рассчитать",
+    placeholder:"Введите параметры и нажмите «Рассчитать».",
+    reco:"Рекомендуемая модель", internal:"Внутренние тепловыделения", env:"Теплоприток через корпус", total:"Общая холодопроизв.",
+    req:"Требуемая мощность (×1.3 запас)", range:"Холодопроизводительность", op:"Диапазон работы", ref:"Хладагент",
+    note_custom:"Нагрузка выше стандартного ряда — свяжитесь с HCK для индивидуального решения.",
+    note_std:"Стандартная модель HCK. Окончательный выбор по паспорту и условиям.",
+    disclaimer:"Калькулятор — справочный инструмент с упрощённой моделью (площадь ≈ 5.5·V^(2/3), U по изоляции). Для ответственных сред уточните у инженеров HCK.",
+    footer:"Кондиционеры HCK для шкафов · Zhejiang Haocheng Industrial Control Equipment Co., Ltd. · IP55 · −40…+55 °C · R410A · ротационный компрессор · RS485 · CE-marked · OEM/ODM"
+  },
+  pt:{
+    title:"Seletor de Ar-Condicionado para Painel",
+    sub:"Calculadora grátis de resfriamento de painel — dimensione o modelo HCK em segundos",
+    inputs:"Parâmetros de entrada",
+    vol:"Volume interno do painel (m³)", h_vol:"ex. 0.6 m³ para painel 800×600×1200 mm",
+    heat:"Carga térmica interna (W)", h_heat:"Soma do calor de inversores, CLP, transformadores, baterias…",
+    amb:"Temp. ambiente máx. (°C)", tint:"Temp. interna alvo (°C)",
+    ins:"Isolamento do painel", none:"Sem isolamento (aço)", light:"Isolamento leve", well:"Bem isolado",
+    ip:"Grau de proteção", volt:"Tensão de alimentação",
+    calc:"Calcular",
+    placeholder:"Insira os parâmetros e clique em Calcular.",
+    reco:"Modelo recomendado", internal:"Carga térmica interna", env:"Ganho pela carcça", total:"Demanda total",
+    req:"Capacidade req. (×1.3 segurança)", range:"Capacidade", op:"Faixa de operação", ref:"Refrigerante",
+    note_custom:"Carga acima da faixa padrão — contate HCK para solução sob medida.",
+    note_std:"Modelo HCK padrão. Seleção final conforme datasheet e condições.",
+    disclaimer:"Calculadora de referência com modelo simplificado (área ≈ 5.5·V^(2/3), U por isolamento). Ambientes críticos: confirme com a equipe HCK.",
+    footer:"Ar-condicionado HCK para painéis · Zhejiang Haocheng Industrial Control Equipment Co., Ltd. · IP55 · −40…+55 °C · R410A · compressor rotativo · RS485 · CE-marked · OEM/ODM"
+  },
+  fr:{
+    title:"Sélecteur de climatiseur pour armoire",
+    sub:"Calculateur de refroidissement gratuit — dimensionnez le modèle HCK en quelques secondes",
+    inputs:"Paramètres",
+    vol:"Volume interne de l'armoire (m³)", h_vol:"ex. 0.6 m³ pour une armoire 800×600×1200 mm",
+    heat:"Charge thermique interne (W)", h_heat:"Somme de la chaleur des variateurs, API, transfo, batteries…",
+    amb:"Temp. ambiante max (°C)", tint:"Temp. interne cible (°C)",
+    ins:"Isolation de l'armoire", none:"Sans isolation (acier)", light:"Isolation légère", well:"Bien isolée",
+    ip:"Indice de protection", volt:"Tension d'alimentation",
+    calc:"Calculer",
+    placeholder:"Saisissez les paramètres et cliquez sur Calculer.",
+    reco:"Modèle recommandé", internal:"Charge thermique interne", env:"Apport par enveloppe", total:"Besoin total",
+    req:"Puissance req. (×1.3 sécurité)", range:"Puissance frig.", op:"Plage de fonctionnement", ref:"Frigorigène",
+    note_custom:"Charge hors gamme standard — contactez HCK pour une solution sur mesure.",
+    note_std:"Modèle HCK standard. Choix final selon fiche technique et conditions.",
+    disclaimer:"Calculateur indicatif à modèle simplifié (surface ≈ 5.5·V^(2/3), U selon isolation). Environnements critiques : validez avec HCK.",
+    footer:"Climatiseurs HCK pour armoires · Zhejiang Haocheng Industrial Control Equipment Co., Ltd. · IP55 · −40…+55 °C · R410A · compresseur rotatif · RS485 · CE-marked · OEM/ODM"
+  }
+};
+var LANGS=[["en","EN"],["zh","中文"],["ru","RU"],["pt","PT"],["fr","FR"]];
+var MODELS=[{w:2000,n:"HCK-2000"},{w:3000,n:"HCK-3000"},{w:3500,n:"HCK-3500"},{w:5000,n:"HCK-5000"},{w:7500,n:"HCK-7500"}];
+
+function setLang(l){
+  var t=L[l];
+  document.getElementById("t_title").textContent=t.title;
+  document.getElementById("t_sub").textContent=t.sub;
+  document.getElementById("t_inputs").textContent=t.inputs;
+  document.getElementById("l_vol").textContent=t.vol; document.getElementById("h_vol").textContent=t.h_vol;
+  document.getElementById("l_heat").textContent=t.heat; document.getElementById("h_heat").textContent=t.heat;
+  document.getElementById("l_amb").textContent=t.amb; document.getElementById("l_tint").textContent=t.tint;
+  document.getElementById("l_ins").textContent=t.ins;
+  document.getElementById("o_none").textContent=t.none; document.getElementById("o_light").textContent=t.light; document.getElementById("o_well").textContent=t.well;
+  document.getElementById("l_ip").textContent=t.ip; document.getElementById("l_volt").textContent=t.volt;
+  document.getElementById("b_calc").textContent=t.calc;
+  document.getElementById("t_placeholder").textContent=t.placeholder;
+  document.getElementById("t_disclaimer").textContent=t.disclaimer;
+  document.getElementById("t_footer").textContent=t.footer;
+  document.documentElement.lang=l;
+  document.title=(l==="zh"?"机柜空调选型计算器":l==="ru"?"Подбор кондиционера для шкафа":l==="pt"?"Seletor de Ar-Condicionado para Painel":l==="fr"?"Sélecteur de climatiseur pour armoire":"Cabinet Air Conditioner Selector");
+  // refresh result language if already computed
+  if(window._last) calc();
+  // lang bar highlight
+  document.querySelectorAll("#langbar button").forEach(function(b){b.className=(b.dataset.l===l?"on":"");});
+  try{history.replaceState(null,"","selector.html?lang="+l);}catch(e){}
+}
+
+function buildLangBar(){
+  var bar=document.getElementById("langbar");
+  LANGS.forEach(function(p){
+    var b=document.createElement("button"); b.textContent=p[1]; b.dataset.l=p[0];
+    b.onclick=function(){setLang(p[0]);}; bar.appendChild(b);
+  });
+}
+
+function calc(){
+  var l=document.documentElement.lang||"en"; var t=L[l];
+  var V=parseFloat(document.getElementById("vol").value)||0;
+  var Qint=parseFloat(document.getElementById("heat").value)||0;
+  var Tamb=parseFloat(document.getElementById("amb").value)||0;
+  var Tint=parseFloat(document.getElementById("tint").value)||35;
+  var U=parseFloat(document.getElementById("ins").value)||6.0;
+  var ip=document.getElementById("ip").value;
+  var volt=document.getElementById("volt").value;
+  var A=5.5*Math.pow(Math.max(V,0.001),2/3);
+  var dT=Math.max(0,Tamb-Tint);
+  var Qenv=U*A*dT;
+  var Qtotal=Qint+Qenv;
+  var req=Qtotal*1.3;
+  var pick=null;
+  for(var i=0;i<MODELS.length;i++){ if(MODELS[i].w>=req){pick=MODELS[i];break;} }
+  var custom=!pick;
+  if(custom) pick=MODELS[MODELS.length-1];
+  window._last=true;
+  var html='<div class="model">'+pick.n+'</div>';
+  html+='<table><tr><th>'+t.internal+'</th><td>'+Math.round(Qint)+' W</td></tr>'
+       +'<tr><th>'+t.env+'</th><td>'+Math.round(Qenv)+' W</td></tr>'
+       +'<tr><th>'+t.total+'</th><td>'+Math.round(Qtotal)+' W</td></tr>'
+       +'<tr><th>'+t.req+'</th><td>'+Math.round(req)+' W</td></tr>'
+       +'<tr><th>'+t.range+'</th><td>'+(pick.w*0.9|0)+'–'+pick.w+' W</td></tr>'
+       +'<tr><th>'+t.op+'</th><td>−40 … +55 °C</td></tr>'
+       +'<tr><th>'+t.ref+'</th><td>R410A</td></tr></table>';
+  html+='<div class="note" style="margin-top:10px">'+(custom?t.note_custom:t.note_std)+'</div>';
+  document.getElementById("reco").innerHTML=html;
+  var tags=document.getElementById("tags"); tags.innerHTML="";
+  [ip,volt,"RS485","IP55 enclosure","CE-marked","OEM/ODM"].forEach(function(x){
+    if(x){var s=document.createElement("span");s.className="tag";s.textContent=x;tags.appendChild(s);}
+  });
+}
+document.getElementById("b_calc").onclick=calc;
+buildLangBar();
+(function(){var p=new URLSearchParams(location.search).get("lang"); setLang(LANGS.some(function(x){return x[0]===p;})?p:"en");})();
+</script>
+</body>
+</html>
